@@ -36,14 +36,37 @@ public:
 		}
 	}
 
+	bool isMatchedChar(char a, char b) {
+		return (a == b);
+	}
+
+	
+
 	GuessResult guess(const string& guessNumber)
 	{
+		int qIdx, gIdx;
+		GuessResult res;
+
+		res.solved = false;
+		res.strikes = 0;
+		res.balls = 0;
+
 		assertIllegalArgument(guessNumber);
-		if (guessNumber == question) {
-			return { true, 3, 0 };
+
+		for (qIdx = 0; qIdx < 3; qIdx++) {
+			for (gIdx = 0; gIdx < 3; gIdx++) {
+				if (!isMatchedChar(question[qIdx], guessNumber[gIdx])) continue;
+				if (qIdx == gIdx)
+					res.strikes++;
+				else
+					res.balls++;
+			}
 		}
-		return { false, 0, 0 };
-		
+
+		if (res.strikes == 3)
+			res.solved = true;
+
+		return res;
 	}
 
 private:
